@@ -20,65 +20,46 @@ export class GildedRose {
   updateQuality() {
     const QUALITY_MAX : number = 50;
     
-
+    
     for (let i = 0; i < this.items.length; i++) {
       
-      const isAgedBrie = this.items[i].name === 'Aged Brie';
-      const isBackstagePasses = this.items[i].name === 'Backstage passes to a TAFKAL80ETC concert';
-      const isSulfuras = this.items[i].name === 'Sulfuras, Hand of Ragnaros';
+      const item = this.items[i];
+      
+      const isAgedBrie = item.name === 'Aged Brie';
+      const isBackstagePasses = item.name === 'Backstage passes to a TAFKAL80ETC concert';
+      const isSulfuras = item.name === 'Sulfuras, Hand of Ragnaros';
+
+      if(isSulfuras) continue;
       
       if (isBackstagePasses) {
-        if (this.items[i].sellIn < 6){
+        if (item.sellIn < 6){
           this.increaseQuality(i, 3);
-        }else if(this.items[i].sellIn < 11){ 
+        }else if(item.sellIn < 11){ 
           this.increaseQuality(i, 2);
         }else{
           this.increaseQuality(i,1);
         }
         
-        if (this.items[i].quality > QUALITY_MAX) this.items[i].quality = QUALITY_MAX;
-
-        this.items[i].sellIn--;
-        if (this.items[i].sellIn < 0){
-          this.items[i].quality = 0;
-
-          if (this.items[i].quality > 0) this.decreaseQuality(i)
-        } 
-
+        item.sellIn--;
         
-
-
-      }else if(isAgedBrie){ 
-
-        this.items[i].sellIn--;
-
-        (this.items[i].sellIn < 0) ? this.increaseQuality(i,2) : this.increaseQuality(i,1);
-
-        if (this.items[i].quality > QUALITY_MAX) this.items[i].quality = QUALITY_MAX;
+        if (item.sellIn < 0) item.quality = 0;
+          
+      }else {
+        item.sellIn--;
         
-      }else if(isSulfuras){
-        
-      }else{
-
-          if (this.items[i].quality > 0) this.decreaseQuality(i)
-
-          this.items[i].sellIn = this.items[i].sellIn - 1;
-
-          if (this.items[i].sellIn < 0 && this.items[i].quality > 0) this.decreaseQuality(i)
+        if(isAgedBrie){ 
+          
+          (item.sellIn < 0) ? this.increaseQuality(i,2) : this.increaseQuality(i,1);
+          
+        }else{
+          if (item.quality > 0){
+            this.decreaseQuality(i)
+            if (item.sellIn < 0) this.decreaseQuality(i)
+          }
+          }
       }
       
-      
-    //   if (this.items[i].sellIn < 0) {
-    //     if (!isAgedBrie) {
-    //         if (this.items[i].quality > 0) {
-    //           if (!isSulfuras && !isBackstagePasses) {
-    //             this.decreaseQuality(i)
-    //           }
-    //         }
-    //     } 
-        
-    //   }
-     }
+    }
     
     return this.items;
   }
@@ -86,6 +67,7 @@ export class GildedRose {
   
   private increaseQuality(itemIndex, increaseAmount){
     this.items[itemIndex].quality = this.items[itemIndex].quality + increaseAmount;
+    if (this.items[itemIndex].quality > 50) this.items[itemIndex].quality = 50;
   }
   
   private decreaseQuality(itemIndex){
