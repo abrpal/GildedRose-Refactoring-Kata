@@ -43,29 +43,20 @@ export class GildedRose {
 
 
       }else if(isAgedBrie){ 
-        if (this.items[i].quality < QUALITY_MAX) this.increaseQuality(i,1);
 
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+        this.items[i].sellIn--;
 
-        if (this.items[i].sellIn < 0 && (this.items[i].quality < QUALITY_MAX))this.increaseQuality(i,1);
+        (this.items[i].sellIn < 0) ? this.increaseQuality(i,2) : this.increaseQuality(i,1);
+
+        if (this.items[i].quality > QUALITY_MAX) this.items[i].quality = QUALITY_MAX;
+        
+      }else if(isSulfuras){
         
       }else{
 
-          if (this.items[i].quality > 0) {
-            if (!isSulfuras) {
-              this.decreaseQuality(i)
-            }
-          }
-       
+          if (this.items[i].quality > 0) this.decreaseQuality(i)
 
-      }
-      
-      
-      
-      
-      
-      if (!isSulfuras && !isBackstagePasses && !isAgedBrie) {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+          this.items[i].sellIn = this.items[i].sellIn - 1;
       }
       
       
