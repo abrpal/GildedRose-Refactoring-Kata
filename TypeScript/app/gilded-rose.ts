@@ -24,27 +24,9 @@ export class GildedRose {
       const isBackstagePasses = this.items[i].name === 'Backstage passes to a TAFKAL80ETC concert';
       const isSulfuras = this.items[i].name === 'Sulfuras, Hand of Ragnaros';
 
-
-      // if(isAgedBrie){
-      //   if (this.items[i].quality < 50)
-      // }else if(isBackstagePasses){
-
-      // }else if(isSulfuras){
-
-      // }else{
-        
-      // }
-
-      if (!isAgedBrie && !isBackstagePasses) {
-        if (this.items[i].quality > 0) {
-          if (!isSulfuras) {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else if (this.items[i].quality < 50) {
+      if (isBackstagePasses) {
+        if (this.items[i].quality < 50){ 
           this.increaseQuality(i);
-          
-          if (isBackstagePasses) {
             if (this.items[i].sellIn < 11) {
               if (this.items[i].quality < 50) {
                 this.increaseQuality(i);
@@ -52,8 +34,18 @@ export class GildedRose {
                 if (this.items[i].sellIn < 6) this.increaseQuality(i);
               }
             }
+          }
+        }else{
+          if (!isAgedBrie) {
+            if (this.items[i].quality > 0) {
+              if (!isSulfuras) {
+                this.decreaseQuality(i)
+              }
+            }
+          } else if (this.items[i].quality < 50) {
+            this.increaseQuality(i);
+          }
         }
-      }
 
 
 
@@ -69,11 +61,11 @@ export class GildedRose {
           if (!isBackstagePasses) {
             if (this.items[i].quality > 0) {
               if (!isSulfuras) {
-                this.items[i].quality = this.items[i].quality - 1
+                this.decreaseQuality(i)
               }
             }
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
+            this.items[i].quality = 0;
           }
         } else {
           if (this.items[i].quality < 50) {
@@ -89,5 +81,9 @@ export class GildedRose {
 
   private increaseQuality(itemIndex){
     this.items[itemIndex].quality = this.items[itemIndex].quality + 1
+  }
+
+  private decreaseQuality(itemIndex){
+    this.items[itemIndex].quality = this.items[itemIndex].quality - 1
   }
 }
